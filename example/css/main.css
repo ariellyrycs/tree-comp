@@ -1,0 +1,3 @@
+.closed > li {
+  display: none;
+}
