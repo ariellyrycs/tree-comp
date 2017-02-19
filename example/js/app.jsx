@@ -72,6 +72,26 @@ let dataExample =[
 	}
 ]
 
+let i = [
+  {
+    label: '1',
+    dataArray: [
+      {
+        label: '2',
+        dataArray2: [
+          {
+            label: 4
+          }
+        ]
+      },
+      {
+        label: '3'
+      }
+    ],
+
+  }
+]
+
 class AppRoot extends React.Component {
   constructor()  {
     super();
@@ -79,7 +99,7 @@ class AppRoot extends React.Component {
 
   render() {
     debugger;
-    return <TreeComp data={dataExample} />
+    return <TreeComp data={i} accessKeys="dataArray.dataArray2"/>
   }
 }
 var appRootElement = React.createElement(AppRoot, {});
