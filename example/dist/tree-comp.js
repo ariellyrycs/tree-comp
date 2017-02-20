@@ -3,43 +3,52 @@ import React from 'react';
 let getProperty = function (data, propertyStr) {
   let properties = propertyStr.split('.');
   let currentdata = data;
-  while (properties.length) {
-    if(properties.length === 0 || !currentdata[properties[0]] || Array.isArray(currentdata)) {
+  for(let i = 0, len = properties.length; i < len; i += 1) {
+    if(!currentdata[properties[i]] || Array.isArray(currentdata)) {
       return {
         data: currentdata,
-        accessKeys: properties.join('.')
+        accessKeys: properties.splice(i).join('.')
       };
     }
-    currentdata = currentdata[properties.shift()];
+    currentdata = currentdata[properties[i]];
   }
+  return {
+    data: currentdata,
+    accessKeys: ''
+  };
 };
 
-
-
-class TreeComp extends React.Component {
-  render() {
-    debugger;
-    let {data, accessKeys} = this.props;
-    return (
-        <TreeNode data={data} accessKeys={accessKeys}/>
-    );
-  }
-}
-
 class TreeNode extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      opened: false
+    };
+
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle(event) {
+    event.preventDefault();
+    this.setState({
+      opened: !this.state.opened
+    });
+  }
+
   render() {
-    debugger;
     let nodes;
     let dataProps = this.props.data;
-    let title = <li className="title"><span>{dataProps.label}</span></li>;
+    let title = <li className="title">
+      <a href="#" onClick={this.toggle} ><span className={"glyphicon " + (this.state.opened? "glyphicon-minus": "glyphicon-plus")}></span> {dataProps.label}</a>
+    </li>;
     let {data, accessKeys} = getProperty(dataProps, this.props.accessKeys);
-    if(Array.isArray(data)) {
+    if(Array.isArray(data) && this.state.opened) {
       nodes = <li className="list">
-        {data.dataArray.map((item, index) => <TreeComp data={item} accessKeys={accessKeys} key={index}/>)}
+        {data.map((item, index) => <TreeNode data={item} accessKeys={accessKeys} key={index}/>)}
       </li>;
     }
     return (
-      <ul className="unstyled">
+      <ul className="list-unstyled">
         {title}
         {nodes}
       </ul>
@@ -47,21 +56,4 @@ class TreeNode extends React.Component {
   }
 }
 
-export default TreeComp;
-
-
-/*
-<ul>
-  <li>
-    <span>title</span>
-    <div>
-      <ul>
-        <li><span></span></li>
-      </ul>
-    </div>
-  </li>
-</ul>
-
-
-li>li+li
-*/
+export default TreeNode;

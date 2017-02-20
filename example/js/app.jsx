@@ -72,7 +72,7 @@ let dataExample =[
 	}
 ]
 
-let i = [
+let i =
   {
     label: '1',
     dataArray: [
@@ -90,7 +90,6 @@ let i = [
     ],
 
   }
-]
 
 class AppRoot extends React.Component {
   constructor()  {
