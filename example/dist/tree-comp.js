@@ -35,24 +35,34 @@ class TreeNode extends React.Component {
     });
   }
 
+  hasContent() {
+
+  }
+
   render() {
     let nodes;
     let dataProps = this.props.data;
-    let title = <li className="title">
-      <a href="#" onClick={this.toggle} ><span className={"glyphicon " + (this.state.opened? "glyphicon-minus": "glyphicon-plus")}></span> {dataProps.label}</a>
-    </li>;
+    debugger;
+    let iconClass = (this.state.opened ? "glyphicon-minus": "glyphicon-plus");
+    let title;
     let {data, accessKeys} = getProperty(dataProps, this.props.accessKeys);
-    if(Array.isArray(data) && this.state.opened) {
-      nodes = <li className="list">
-        {data.map((item, index) => <TreeNode data={item} accessKeys={accessKeys} key={index}/>)}
-      </li>;
+    let list;
+    if(Array.isArray(data)) {
+      title = <a href="#" onClick={this.toggle} ><span className={"glyphicon " + iconClass}></span> {dataProps.label}</a>;
+      if(this.state.opened) {
+        nodes = <li className="list">
+          {data.map((item, index) => <TreeNode data={item} accessKeys={accessKeys} key={index}/>)}
+        </li>;
+      }
+    } else {
+      title = <a href="#" onClick={this.toggle} >&nbsp;&nbsp;&nbsp;&nbsp;{dataProps.label}</a>;
     }
-    return (
-      <ul className="list-unstyled">
-        {title}
+    return <ul className="list-unstyled">
+        <li className="title">
+          {title}
+        </li>
         {nodes}
-      </ul>
-    );
+      </ul>;
   }
 }
 
